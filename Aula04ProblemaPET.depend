@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1584205420 source:c:\users\gabriel.menegueti\desktop\aula04problemapet\main.cpp
+	<iostream>
+
+1748453443 source:c:\users\tetzner\desktop\mo\aula04problemapet\main.cpp
+	<iostream>
+	"string.h"
+	"cabecalho.h"
+	<cstdlib>
+	<ctime>
+
+1748365856 c:\users\tetzner\desktop\mo\aula04problemapet\cabecalho.h
+
+1749175798 source:c:\users\tetzner\desktop\aula04problemapet\main.cpp
+	<iostream>
+	"string.h"
+	<stdlib.h>
+	"cabecalho.h"
+	<cstdlib>
+	<ctime>
+	"math.h"
+
+1749161614 c:\users\tetzner\desktop\aula04problemapet\cabecalho.h
+
