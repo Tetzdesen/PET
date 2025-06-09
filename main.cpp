@@ -29,11 +29,11 @@ int main()
 
     num_motoristas = ceil(horas_somadas / tempo_normal_trabalho);
 
-   // criar_solucao(s);
     criar_he_gul(s);
-   // criar_he_ale(s);
+
     calcular_fo(s);
     escrever_solucao(s);
+
     //memcpy(&clone, &s, sizeof(s));
   //  gerar_vizinha(clone);
     //escrever_solucao(clone);
@@ -117,33 +117,28 @@ void criar_he_ale(Solucao &s){
 }
 
 void criar_he_gul(Solucao& s){
-    int tempo_trabalho = 0;
-    int hora_tarefa = 0;
+
     memset(&s.aux, 0, sizeof(s.aux));
 
     for(int i = 0; i < num_tarefas; i++){
+        for(int j = 0; j < num_motoristas; j++){
+            // Somar tempo de trabalho com a hora de trabalho
+            //printf("%d ", (h_termino_tarefa[s.matriz_sol[j][s.aux[j] - 1]] - h_inicio_tarefa[s.matriz_sol[j][0]]));
 
-        for(int j = 1; j < num_motoristas; j++){
-
-            if((tempo_trabalho < tempo_normal_trabalho)) {
-                s.matriz_sol[j-1][s.aux[j-1]] = i;
-                s.aux[j-1]++;
-                tempo_trabalho += h_termino_tarefa[s.matriz_sol[j-1][s.aux[j-1]]] - h_inicio_tarefa[s.matriz_sol[j-1][s.aux[j-1]]];
+            if(s.aux[j] == 0 || (h_termino_tarefa[i+1] + ([s.matriz_sol[j][s.aux[j] - 1]] - h_inicio_tarefa[s.matriz_sol[j][0]])) <= tempo_normal_trabalho){
+                s.matriz_sol[j][s.aux[j]] = i;
+                s.aux[j]++;
                 break;
             }
-            s.matriz_sol[j][s.aux[j]] = i;
-            s.aux[j]++;
-            tempo_trabalho += h_termino_tarefa[s.matriz_sol[j][s.aux[j]]] - h_inicio_tarefa[s.matriz_sol[j][s.aux[j]]];
-            break;
         }
     }
 
-    for(int i = 0; i < num_motoristas; i++){
+   for(int i = 0; i < num_motoristas; i++){
        for(int j = 0; j < s.aux[i]; j++){
-           printf("%d ", s.matriz_sol[i][j]);
+          printf("%d ", s.matriz_sol[i][j]);
        }
        printf("\n");
-    }
+   }
 }
 
 
@@ -154,23 +149,6 @@ void escrever_solucao(Solucao& s){
     printf("TEMPO EXCECCAO: %d \n", s.h_exce);
     printf("FO: %d \n", s.fo);
 }
-
-/*
-void criar_he_gu(Solucao &s){
-    memset(&s.aux, 0, sizeof(s.aux));
-
-    double horas_trabalhadas;
-    int j = 0;
-    for(int i = 0; i < num_tarefas; i++){
-      horas_trabalhadas = 0.0;
-      for(;j  < num_tarefas && horas_trabalhadas < tempo_normal_trabalho; j++){
-        s.matriz_sol[i][j] = j;
-        horas_trabalhadas += h_termino_tarefa[j] - h_inicio_tarefa[j];
-        printf("MOT: %d TAR: %d\n", i, s.matriz_sol[i][j]);
-      }
-      printf("\n");
-    }
-}*/
 
 void calcular_fo(Solucao &s){
 
