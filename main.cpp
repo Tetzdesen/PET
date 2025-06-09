@@ -117,24 +117,24 @@ void criar_he_ale(Solucao &s){
 }
 
 void criar_he_gul(Solucao& s){
-    int tempo_trabalho;
-
+    int tempo_trabalho = 0;
+    int hora_tarefa = 0;
     memset(&s.aux, 0, sizeof(s.aux));
 
     for(int i = 0; i < num_tarefas; i++){
-        tempo_trabalho = 0;
-        for(int j = 0; j < num_motoristas; j++){
+
+        for(int j = 1; j < num_motoristas; j++){
 
             if((tempo_trabalho < tempo_normal_trabalho)) {
-                s.matriz_sol[j][s.aux[j]] = i;
-                s.aux[j]++;
-                tempo_trabalho += h_termino_tarefa[s.matriz_sol[j][s.aux[j]]] - h_inicio_tarefa[s.matriz_sol[j][s.aux[j]]];
-
-            } else{
-                s.matriz_sol[j+1][s.aux[j+1]] = i;
-                s.aux[j+1]++;
+                s.matriz_sol[j-1][s.aux[j-1]] = i;
+                s.aux[j-1]++;
+                tempo_trabalho += h_termino_tarefa[s.matriz_sol[j-1][s.aux[j-1]]] - h_inicio_tarefa[s.matriz_sol[j-1][s.aux[j-1]]];
                 break;
             }
+            s.matriz_sol[j][s.aux[j]] = i;
+            s.aux[j]++;
+            tempo_trabalho += h_termino_tarefa[s.matriz_sol[j][s.aux[j]]] - h_inicio_tarefa[s.matriz_sol[j][s.aux[j]]];
+            break;
         }
     }
 
