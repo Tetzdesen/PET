@@ -16,10 +16,10 @@ const int PESO_EXCEDIDO = 100;
 
 int main()
 {
-    srand(time(0));
+    //srand(time(0));
     Solucao s, clone;
-    ler_dados("csp25.txt");
-    escrever_dados("csp25.txt");
+    ler_dados("instancias/csp25.txt");
+    escrever_dados("instancias/csp25.txt");
 
     double horas_somadas = 0;
 
@@ -30,19 +30,20 @@ int main()
     num_motoristas = ceil(horas_somadas / tempo_normal_trabalho);
 
    // criar_solucao(s);
-    //criar_he_gul(s);
-    criar_he_ale(s);
+    criar_he_gul(s);
+   // criar_he_ale(s);
     calcular_fo(s);
-
-   // memcpy(&clone, &s, sizeof(s));
-
-    //for(int i = 0; i < 10000000; i++){
-     //   gerar_vizinha(clone);
+    escrever_solucao(s);
+    //memcpy(&clone, &s, sizeof(s));
+  //  gerar_vizinha(clone);
+    //escrever_solucao(clone);
+   // for(int i = 0; i < 100000000; i++){
+      //  gerar_vizinha(clone);
       //  calcular_fo(clone);
       //  if(s.fo > clone.fo) memcpy(&s, &clone, sizeof(clone));
     //}
 
-    escrever_solucao(s);
+    //escrever_solucao(s);
     return 0;
 }
 
@@ -76,7 +77,7 @@ void ler_dados(char *nome_arq){
 
     fclose(f);
 }
-/*
+
 void criar_solucao(Solucao &s){
 
     int tarefa_por_motorista = 0;
@@ -96,28 +97,10 @@ void criar_solucao(Solucao &s){
        printf("\n");
     }
 
-}*/
-void criar_he_gul(Solucao& s){
-    int tarefa_por_motorista = 0;
-    memset(&s.aux, 0, sizeof(s.aux));
-
-    for(int j = 0; j < num_tarefas; j++){
-        tarefa_por_motorista = tarefa_por_motorista % num_motoristas;
-        s.matriz_sol[tarefa_por_motorista][s.aux[tarefa_por_motorista]] = j;
-        s.aux[tarefa_por_motorista]++;
-        tarefa_por_motorista++;
-    }
-
-    for(int i = 0; i < num_motoristas; i++){
-       for(int j = 0; j < s.aux[i]; j++){
-           printf("%d ", s.matriz_sol[i][j]);
-       }
-       printf("\n");
-    }
 }
 
 void criar_he_ale(Solucao &s){
-    int mot, aux;
+    int mot;
     memset(&s.aux, 0, sizeof(s.aux));
     for(int i = 0; i < num_tarefas; i++){
         mot = rand() % num_motoristas;
@@ -132,6 +115,37 @@ void criar_he_ale(Solucao &s){
        printf("\n");
     }
 }
+
+void criar_he_gul(Solucao& s){
+    int tempo_trabalho;
+
+    memset(&s.aux, 0, sizeof(s.aux));
+
+    for(int i = 0; i < num_tarefas; i++){
+        tempo_trabalho = 0;
+        for(int j = 0; j < num_motoristas; j++){
+
+            if((tempo_trabalho < tempo_normal_trabalho)) {
+                s.matriz_sol[j][s.aux[j]] = i;
+                s.aux[j]++;
+                tempo_trabalho += h_termino_tarefa[s.matriz_sol[j][s.aux[j]]] - h_inicio_tarefa[s.matriz_sol[j][s.aux[j]]];
+
+            } else{
+                s.matriz_sol[j+1][s.aux[j+1]] = i;
+                s.aux[j+1]++;
+                break;
+            }
+        }
+    }
+
+    for(int i = 0; i < num_motoristas; i++){
+       for(int j = 0; j < s.aux[i]; j++){
+           printf("%d ", s.matriz_sol[i][j]);
+       }
+       printf("\n");
+    }
+}
+
 
 void escrever_solucao(Solucao& s){
     printf("\nTEMPO EXTRA: %d \n", s.h_extra);
@@ -211,5 +225,14 @@ void gerar_vizinha(Solucao &s){
     while(mot2 == mot1);
     remover_tarefa(s, mot1, pos);
     inserir_tarefa(s, mot2, tar);
+
+  //  printf("CLONE: ");
+
+    //for(int i = 0; i < num_motoristas; i++){
+       //for(int j = 0; j < s.aux[i]; j++){
+          // printf("%d ", s.matriz_sol[i][j]);
+       //}
+       //printf("\n");
+    //}
     calcular_fo(s);
 }

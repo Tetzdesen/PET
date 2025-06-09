@@ -73,7 +73,7 @@ O programa deve fornecer, para cada solução:
 
 ## 🧪 Exemplos e Testes
 
-> ⚠️ As instâncias de teste devem ser disponibilizadas na pasta `instancias/` (não incluídas neste repositório por padrão).
+> ⚠️ As instâncias de teste devem ser disponibilizadas na pasta `instancias/`.
 
 ---
 
