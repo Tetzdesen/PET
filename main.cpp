@@ -29,11 +29,19 @@ int main()
 
     num_motoristas = ceil(horas_somadas / tempo_normal_trabalho);
 
+<<<<<<< HEAD
     heu_cons_ale_gul(s, 10);
 
     calcular_fo(s);
     escrever_solucao(s);
 
+=======
+    criar_he_gul(s);
+
+    calcular_fo(s);
+    escrever_solucao(s);
+
+>>>>>>> a745adde9341ba010b0055b44c7fab74ba093f7c
     //memcpy(&clone, &s, sizeof(s));
   //  gerar_vizinha(clone);
     //escrever_solucao(clone);
@@ -116,12 +124,17 @@ void heu_cons_ale(Solucao &s){
     }
 }
 
+<<<<<<< HEAD
 void heu_cons_gul(Solucao& s){
+=======
+void criar_he_gul(Solucao& s){
+>>>>>>> a745adde9341ba010b0055b44c7fab74ba093f7c
 
     memset(&s.aux, 0, sizeof(s.aux));
 
     int flag;
     for(int i = 0; i < num_tarefas; i++){
+<<<<<<< HEAD
         flag = 1;
         for(int j = 0; j < num_motoristas; j++){
             if(s.aux[j] == 0 || (h_termino_tarefa[s.matriz_sol[j][s.aux[j] - 1]] < h_inicio_tarefa[i]) && ((h_termino_tarefa[i] - h_inicio_tarefa[s.matriz_sol[j][0]]) <= tempo_normal_trabalho)){
@@ -171,6 +184,15 @@ void heu_cons_ale_gul(Solucao& s, const double& percentual){
                 s.matriz_sol[j][s.aux[j]] = i;
                 s.aux[j]++;
                 flag = 0;
+=======
+        for(int j = 0; j < num_motoristas; j++){
+            // Somar tempo de trabalho com a hora de trabalho
+            //printf("%d ", (h_termino_tarefa[s.matriz_sol[j][s.aux[j] - 1]] - h_inicio_tarefa[s.matriz_sol[j][0]]));
+
+            if(s.aux[j] == 0 || (h_termino_tarefa[i+1] + ([s.matriz_sol[j][s.aux[j] - 1]] - h_inicio_tarefa[s.matriz_sol[j][0]])) <= tempo_normal_trabalho){
+                s.matriz_sol[j][s.aux[j]] = i;
+                s.aux[j]++;
+>>>>>>> a745adde9341ba010b0055b44c7fab74ba093f7c
                 break;
             }
         }
@@ -182,7 +204,16 @@ void heu_cons_ale_gul(Solucao& s, const double& percentual){
             }
         }
 
+<<<<<<< HEAD
     }
+=======
+   for(int i = 0; i < num_motoristas; i++){
+       for(int j = 0; j < s.aux[i]; j++){
+          printf("%d ", s.matriz_sol[i][j]);
+       }
+       printf("\n");
+   }
+>>>>>>> a745adde9341ba010b0055b44c7fab74ba093f7c
 }
 
 void escrever_solucao(Solucao& s){
