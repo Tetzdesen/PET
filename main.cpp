@@ -13,10 +13,11 @@ const int PESO_EXTRA = 1;
 const int PESO_OCIOSO = 1;
 const int PESO_SOBREPOSICAO = 100;
 const int PESO_EXCEDIDO = 100;
+Solucao vizinha;
 
 int main()
 {
-    srand(time(0));
+   // srand(time(0));
     Solucao s, clone;
     ler_dados("instancias/csp25.txt");
     escrever_dados("instancias/csp25.txt");
@@ -29,26 +30,15 @@ int main()
 
     num_motoristas = ceil(horas_somadas / tempo_normal_trabalho);
 
-    heu_cons_ale_gul(s, 10);
+    heu_cons_ale(s);
 
     calcular_fo(s);
+
     escrever_solucao(s);
 
-    criar_he_gul(s);
-
-    calcular_fo(s);
+    //heu_BL_rand(s, 5 * num_motoristas * num_tarefas);
+    heu_BL_MM(s);
     escrever_solucao(s);
-
-    //memcpy(&clone, &s, sizeof(s));
-  //  gerar_vizinha(clone);
-    //escrever_solucao(clone);
-   // for(int i = 0; i < 100000000; i++){
-      //  gerar_vizinha(clone);
-      //  calcular_fo(clone);
-      //  if(s.fo > clone.fo) memcpy(&s, &clone, sizeof(clone));
-    //}
-
-    //escrever_solucao(s);
     return 0;
 }
 
@@ -135,7 +125,6 @@ void heu_cons_gul(Solucao& s){
                 break;
             }
 
-
         }
         if (flag) {
             if (num_motoristas < MAX_MOTORISTAS) {
@@ -193,6 +182,46 @@ void heu_cons_ale_gul(Solucao& s, const double& percentual){
        }
        printf("\n");
    }
+}
+
+void heu_BL_rand(Solucao& s, int iter){
+
+    while(true){
+        int flag = 1;
+        for(int i = 0; i < iter; i++){
+            memcpy(&vizinha, &s, sizeof(Solucao));
+
+            gerar_vizinha(vizinha);
+
+            calcular_fo(vizinha);
+
+            if(vizinha.fo < s.fo) {
+                memcpy(&s, &vizinha, sizeof(Solucao));
+                flag = 0;
+            }
+        }
+        if(flag) break;
+    }
+}
+
+void heu_BL_MM(Solucao& s){
+    for(int j = 0; j < num_motoristas; j++){
+        for(int i = 0; i < s.aux[j]; i++){
+             memcpy(&vizinha, &s, sizeof(Solucao));
+             int tar = s.matriz_sol[j][i];
+             remover_tarefa(vizinha, j, i);
+             for(int k = 0; k < num_motoristas; k++){
+                if(k != i) {
+                   inserir_tarefa(vizinha, k, tar);
+                   calcular_fo(vizinha);
+                   if(vizinha.fo < s.fo) {
+                     memcpy(&s, &vizinha, sizeof(Solucao));
+                           // flag = 0;
+                   }
+                }
+            }
+        }
+     }
 }
 
 void escrever_solucao(Solucao& s){
@@ -256,14 +285,5 @@ void gerar_vizinha(Solucao &s){
     while(mot2 == mot1);
     remover_tarefa(s, mot1, pos);
     inserir_tarefa(s, mot2, tar);
-
-  //  printf("CLONE: ");
-
-    //for(int i = 0; i < num_motoristas; i++){
-       //for(int j = 0; j < s.aux[i]; j++){
-          // printf("%d ", s.matriz_sol[i][j]);
-       //}
-       //printf("\n");
-    //}
     calcular_fo(s);
 }
