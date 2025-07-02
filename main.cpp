@@ -17,7 +17,7 @@ Solucao vizinha;
 
 int main()
 {
-   // srand(time(0));
+    //srand(time(0));
     Solucao s, clone;
     ler_dados("instancias/csp25.txt");
     escrever_dados("instancias/csp25.txt");
@@ -30,14 +30,14 @@ int main()
 
     num_motoristas = ceil(horas_somadas / tempo_normal_trabalho);
 
-    heu_cons_ale(s);
+    heu_cons_gul(s);
 
     calcular_fo(s);
 
     escrever_solucao(s);
 
     //heu_BL_rand(s, 5 * num_motoristas * num_tarefas);
-    heu_BL_MM(s);
+    heu_BL_PM(s);
     escrever_solucao(s);
     return 0;
 }
@@ -205,24 +205,54 @@ void heu_BL_rand(Solucao& s, int iter){
 }
 
 void heu_BL_MM(Solucao& s){
+    while(true){
+        int flag = 0;
+        for(int j = 0; j < num_motoristas; j++){
+            for(int i = 0; i < s.aux[j]; i++){
+                 memcpy(&vizinha, &s, sizeof(Solucao));
+                 int tar = s.matriz_sol[j][i];
+                 remover_tarefa(vizinha, j, i);
+                 for(int k = 0; k < num_motoristas; k++){
+                    if(k != i) {
+                       inserir_tarefa(vizinha, k, tar);
+                       calcular_fo(vizinha);
+                       if(vizinha.fo < s.fo) {
+                         memcpy(&s, &vizinha, sizeof(Solucao));
+                         flag = 1;
+                       } else{
+                          remover_tarefa(vizinha, k, tar);
+                       }
+                    }
+                }
+            }
+         }
+         if(flag == 0) break;
+     }
+}
+
+void heu_BL_PM(Solucao& s){
+    INICIO : ;
     for(int j = 0; j < num_motoristas; j++){
         for(int i = 0; i < s.aux[j]; i++){
-             memcpy(&vizinha, &s, sizeof(Solucao));
-             int tar = s.matriz_sol[j][i];
-             remover_tarefa(vizinha, j, i);
-             for(int k = 0; k < num_motoristas; k++){
+            memcpy(&vizinha, &s, sizeof(Solucao));
+            int tar = s.matriz_sol[j][i];
+            remover_tarefa(vizinha, j, i);
+            for(int k = 0; k < num_motoristas; k++){
                 if(k != i) {
-                   inserir_tarefa(vizinha, k, tar);
-                   calcular_fo(vizinha);
-                   if(vizinha.fo < s.fo) {
-                     memcpy(&s, &vizinha, sizeof(Solucao));
-                           // flag = 0;
-                   }
+                    inserir_tarefa(vizinha, k, tar);
+                    calcular_fo(vizinha);
+                    if(vizinha.fo < s.fo) {
+                        memcpy(&s, &vizinha, sizeof(Solucao));
+                        goto INICIO;
+                    } else{
+                        remover_tarefa(vizinha, k, tar);
+                    }
                 }
             }
         }
-     }
+    }
 }
+
 
 void escrever_solucao(Solucao& s){
     printf("\nTEMPO EXTRA: %d \n", s.h_extra);
