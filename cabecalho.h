@@ -24,6 +24,7 @@ void heu_cons_ale_gul(Solucao& s, const double& percentual);
 void heu_BL_rand(Solucao& s, int iter);
 void heu_BL_MM(Solucao& s);
 void heu_BL_PM(Solucao& s);
+
 void calcular_fo(Solucao& s);
 void remover_tarefa(Solucao& s, const int& mot, const int&pos);
 void inserir_tarefa(Solucao& s, const int& mot, const int&tar);

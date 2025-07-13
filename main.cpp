@@ -19,8 +19,8 @@ int main()
 {
     //srand(time(0));
     Solucao s, clone;
-    ler_dados("instancias/csp25.txt");
-    escrever_dados("instancias/csp25.txt");
+    ler_dados("instancias/csp50.txt");
+    //escrever_dados("instancias/csp25.txt");
 
     double horas_somadas = 0;
 
@@ -34,10 +34,12 @@ int main()
 
     calcular_fo(s);
 
+    printf("\nSolucao Heuristica Construtiva Gulosa: \n");
     escrever_solucao(s);
 
-    //heu_BL_rand(s, 5 * num_motoristas * num_tarefas);
-    heu_BL_PM(s);
+    heu_BL_MM(s);
+
+    printf("\nSolucao Busca Local Melhor Melhora: \n");
     escrever_solucao(s);
     return 0;
 }
@@ -113,7 +115,6 @@ void heu_cons_ale(Solucao &s){
 
 void heu_cons_gul(Solucao& s){
     memset(&s.aux, 0, sizeof(s.aux));
-
     int flag;
     for(int i = 0; i < num_tarefas; i++){
         flag = 1;
@@ -135,13 +136,6 @@ void heu_cons_gul(Solucao& s){
         }
 
     }
-
-   for(int i = 0; i < num_motoristas; i++){
-       for(int j = 0; j < s.aux[i]; j++){
-          printf("%d ", s.matriz_sol[i][j]);
-       }
-       printf("\n");
-   }
 }
 
 void heu_cons_ale_gul(Solucao& s, const double& percentual){
@@ -175,17 +169,9 @@ void heu_cons_ale_gul(Solucao& s, const double& percentual){
             }
         }
     }
-
-   for(int i = 0; i < num_motoristas; i++){
-       for(int j = 0; j < s.aux[i]; j++){
-          printf("%d ", s.matriz_sol[i][j]);
-       }
-       printf("\n");
-   }
 }
 
 void heu_BL_rand(Solucao& s, int iter){
-
     while(true){
         int flag = 1;
         for(int i = 0; i < iter; i++){
@@ -228,6 +214,7 @@ void heu_BL_MM(Solucao& s){
          }
          if(flag == 0) break;
      }
+
 }
 
 void heu_BL_PM(Solucao& s){
@@ -252,7 +239,6 @@ void heu_BL_PM(Solucao& s){
         }
     }
 }
-
 
 void escrever_solucao(Solucao& s){
     printf("\nTEMPO EXTRA: %d \n", s.h_extra);
